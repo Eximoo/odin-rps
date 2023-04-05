@@ -21,44 +21,68 @@ function fight(playerSelection, computerSelection) {
     (playerSelection === "paper" && computerSelection === "rock") ||
     (playerSelection === "scissors" && computerSelection === "paper")
   ) {
-    return winner(playerSelection,computerSelection);
+    return winner(playerSelection, computerSelection);
   }
-  return loser(playerSelection,computerSelection);   
+  return loser(playerSelection, computerSelection);
 }
 
 function draw(playerSelection) {
-    return `draw`;
+  return `draw`;
 }
 function winner(playerSelection, computerSelection) {
-    return `win`;
+  return `win`;
 }
 
 function loser(playerSelection, computerSelection) {
-    return `lose`;
+  return `lose`;
 }
-let playersScore = 0
-let computerScore = 0
+let playersScore = 0;
+let computerScore = 0;
+let playerSelection;
+const displayScore = document.querySelector("div");
+const btns = document.querySelectorAll("button");
+btns.forEach((button) => {
+  button.addEventListener("click", () => {
+    game(button.textContent);
+    // playerSelection = button.textContent;
+    // console.log(playerSelection);
+  });
+});
+
 // const playerSelection = "scissors";
 // const computerSelection = getComputerChoice();
 // console.log(fight(playerSelection, computerSelection));
-game()
-function game() {
-    for (i = 0; i<5; i++) {
-        setTimeout(1000)
-        const playerSelection = prompt(`Choose ROCK/PAPER/SCISSORS`);
-        const computerSelection = getComputerChoice();
-        switch (fight(playerSelection, computerSelection)) {
-            case 'draw':
-                console.log(`It's a draw! Two times ${playerSelection} Score: ${playersScore} : ${computerScore}`)
-                break;
-            case 'win':
-                console.log(`You won! ${playerSelection} beats ${computerSelection} Score: ${++playersScore} : ${computerScore}`)
-                break;
-            case 'lose':
-                console.log(`You lost! ${computerSelection} beats ${playerSelection} Score: ${playersScore} : ${++computerScore}`)
-                break;
-            default:
-                break;
-        }
+// game();
+
+function game(playerSelection) {
+  // const playerSelection = prompt(`Choose ROCK/PAPER/SCISSORS`);
+  if(playersScore === 5 || computerScore === 5) {
+    return;
+  }
+  const computerSelection = getComputerChoice();
+  switch (fight(playerSelection, computerSelection)) {
+    case "draw":
+      displayScore.textContent = `It's a draw! Two times ${playerSelection} Score: ${playersScore} : ${computerScore}`;
+      break;
+    case "win":
+      displayScore.textContent = `You won! ${playerSelection} beats ${computerSelection} Score: ${++playersScore} : ${computerScore}`;
+      break;
+    case "lose":
+      displayScore.textContent = `You lost! ${computerSelection} beats ${playerSelection} Score: ${playersScore} : ${++computerScore}`;
+      break;
+    default:
+      break;
+  }
+  if (playersScore === 5 || computerScore === 5) {
+    if (playersScore === 5) {
+      displayScore.textContent = `Player WON with score ${playersScore}:${computerScore}`;
+    } else {
+      displayScore.textContent = `Computer WON with score ${computerScore}:${playersScore}`;
     }
+    btns.forEach((button) => {
+      button.removeEventListener("click", () => {
+        game(button.textContent);
+      });
+    });
+  }
 }
